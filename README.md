@@ -1,0 +1,2 @@
+# Pinicola.HotKeys
+
