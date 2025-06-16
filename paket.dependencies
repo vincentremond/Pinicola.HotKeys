@@ -3,4 +3,3 @@ source https://api.nuget.org/v3/index.json
 storage: none
 nuget Dapplo.Windows
 nuget Dapplo.Windows.User32
-nuget NHotkey.Wpf
