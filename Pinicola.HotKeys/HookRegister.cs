@@ -1,5 +1,4 @@
-﻿using System.Reactive.Linq;
-using Dapplo.Windows.Input.Enums;
+﻿using Dapplo.Windows.Input.Enums;
 using Dapplo.Windows.Input.Keyboard;
 using Dapplo.Windows.User32;
 using Dapplo.Windows.User32.Enums;
@@ -25,6 +24,7 @@ public static class HookRegister
                 VirtualKeyCode.Down,
             ]
         );
+
         Register(
             SendTimeStamp,
             [
@@ -39,6 +39,22 @@ public static class HookRegister
         var timestamp = DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss");
         var keycodes = ToKeyCodes(timestamp);
         KeyboardInputGenerator.KeyPresses(keycodes);
+    }
+
+    private static void Register(Action action, VirtualKeyCode[] keyCodes)
+    {
+        var keyCombinationHandler = new KeyCombinationHandler(keyCodes)
+        {
+            IgnoreInjected = false,
+        };
+
+        KeyboardHook.KeyboardEvents.Where(keyCombinationHandler)
+            .Subscribe(x =>
+                {
+                    x.Handled = true;
+                    action();
+                }
+            );
     }
 
     private static VirtualKeyCode[] ToKeyCodes(string input)
@@ -67,27 +83,6 @@ public static class HookRegister
         return keyCodes.ToArray();
     }
 
-    private static void Register(Action action, VirtualKeyCode[] keyCodes, bool keyDown = true)
-    {
-        var keyCombinationHandler = new KeyCombinationHandler(keyCodes)
-        {
-            IgnoreInjected = false,
-        };
-
-        KeyboardHook.KeyboardEvents.Where(keyCombinationHandler)
-            .Subscribe(x =>
-                {
-                    if (!(x.IsKeyDown && keyDown))
-                    {
-                        return;
-                    }
-
-                    action();
-                    x.Handled = true;
-                }
-            );
-    }
-
     private static void Maximize()
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Maximize);
@@ -97,7 +92,6 @@ public static class HookRegister
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Minimize);
     }
-
 
     private static void ShowOrHideForegroundWindow(ShowWindowCommands command)
     {
