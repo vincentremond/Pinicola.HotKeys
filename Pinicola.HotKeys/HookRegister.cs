@@ -2,6 +2,7 @@
 using Dapplo.Windows.Input.Keyboard;
 using Dapplo.Windows.User32;
 using Dapplo.Windows.User32.Enums;
+using TextCopy;
 
 namespace Pinicola.HotKeys;
 
@@ -26,19 +27,31 @@ public static class HookRegister
         );
 
         Register(
-            SendTimeStamp,
+            SetTimeStampToClipBoard,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyT,
             ]
         );
+        Register(
+            SetDayStampToClipBoard,
+            [
+                VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
+                VirtualKeyCode.Menu, VirtualKeyCode.KeyD,
+            ]
+        );
     }
 
-    private static void SendTimeStamp()
+    private static void SetTimeStampToClipBoard()
     {
-        var timestamp = DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss");
-        var keycodes = ToKeyCodes(timestamp);
-        KeyboardInputGenerator.KeyPresses(keycodes);
+        var timestamp = DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss");
+        ClipboardService.SetText(timestamp);
+    }
+
+    private static void SetDayStampToClipBoard()
+    {
+        var timestamp = DateTimeOffset.Now.ToString("yyyy-MM-dd");
+        ClipboardService.SetText(timestamp);
     }
 
     private static void Register(Action action, VirtualKeyCode[] keyCodes)
