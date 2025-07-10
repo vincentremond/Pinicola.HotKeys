@@ -11,9 +11,17 @@ public static class HookRegister
     public static void Run()
     {
         Register(
+            Noop,
+            [
+                VirtualKeyCode.Capital,
+            ]
+        );
+
+        Register(
             Maximize,
             [
-                VirtualKeyCode.LeftWin, VirtualKeyCode.LeftShift,
+                VirtualKeyCode.Shift,
+                VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Up,
             ]
         );
@@ -21,10 +29,12 @@ public static class HookRegister
         Register(
             Minimize,
             [
-                VirtualKeyCode.LeftWin, VirtualKeyCode.LeftShift,
+                VirtualKeyCode.Shift,
+                VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Down,
             ]
         );
+
 
         Register(
             SetTimeStampToClipBoard,
@@ -40,6 +50,12 @@ public static class HookRegister
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyD,
             ]
         );
+    }
+
+    private static void Noop()
+    {
+        // This is a no-op, used to register the hotkey without any action.
+        // It can be useful for debugging or testing purposes.
     }
 
     private static void SetTimeStampToClipBoard()
@@ -68,32 +84,6 @@ public static class HookRegister
                     action();
                 }
             );
-    }
-
-    private static VirtualKeyCode[] ToKeyCodes(string input)
-    {
-        var keyCodes = new List<VirtualKeyCode>(input.Length);
-        foreach (var c in input)
-        {
-            if (char.IsLetterOrDigit(c))
-            {
-                keyCodes.Add((VirtualKeyCode)char.ToUpper(c));
-            }
-            else if (c == '-')
-            {
-                keyCodes.Add(VirtualKeyCode.OemMinus);
-            }
-            else if (c == ':')
-            {
-                keyCodes.Add(VirtualKeyCode.Oem1);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(c), c, message: null);
-            }
-        }
-
-        return keyCodes.ToArray();
     }
 
     private static void Maximize()
