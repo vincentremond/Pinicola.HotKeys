@@ -120,7 +120,17 @@ public static class HookRegister
             return;
         }
 
+        var nextWindow = command == ShowWindowCommands.Minimize
+            ? User32Api.GetWindow(foregroundWindowHandle, GetWindowCommands.GW_HWNDNEXT)
+            : IntPtr.Zero;
+
         User32Api.ShowWindow(foregroundWindowHandle, command);
+
+        if (nextWindow != IntPtr.Zero)
+        {
+            User32Api.SetForegroundWindow(nextWindow);
+        }
+    }
 
     private static void YoutubeNext()
     {
