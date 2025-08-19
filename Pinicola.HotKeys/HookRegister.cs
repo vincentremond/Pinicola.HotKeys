@@ -59,6 +59,13 @@ public static class HookRegister
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyD,
             ]
         );
+        Register(
+            YoutubeNext,
+            [
+                VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
+                VirtualKeyCode.Menu, VirtualKeyCode.KeyN,
+            ]
+        );
     }
 
     private static void Noop()
@@ -114,5 +121,67 @@ public static class HookRegister
         }
 
         User32Api.ShowWindow(foregroundWindowHandle, command);
+
+    private static void YoutubeNext()
+    {
+        // Save current foreground window handle
+        var foregroundWindowHandle = User32Api.GetForegroundWindow();
+
+        // Find the Chrome window with YouTube in the title
+        var chromeWindowHandle = GetChromeWindowHandleWithYoutubeTitle();
+        if (chromeWindowHandle == IntPtr.Zero)
+        {
+            // If no Chrome window with YouTube title is found, do nothing
+            return;
+        }
+
+        // Bring chrome with Youtube in title to front
+        User32Api.SetForegroundWindow(chromeWindowHandle);
+
+        // Send Alt+L to remove from Watch Later playlist
+        KeyboardInputGenerator.KeyCombinationPress(
+            VirtualKeyCode.LeftMenu,
+            VirtualKeyCode.KeyL
+        );
+
+        // Wait for 1 second
+        Thread.Sleep(1000);
+
+        // Send Shift+N to play next video
+        KeyboardInputGenerator.KeyCombinationPress(
+            VirtualKeyCode.MediaNextTrack
+        );
+
+        // Wait for 1 second
+        Thread.Sleep(1000);
+
+        // Restore original foreground window
+        if (foregroundWindowHandle != IntPtr.Zero)
+        {
+            User32Api.SetForegroundWindow(foregroundWindowHandle);
+        }
+    }
+
+    private static IntPtr GetChromeWindowHandleWithYoutubeTitle()
+    {
+        var result = IntPtr.Zero;
+        User32Api.EnumWindows(
+            (hWnd, _) =>
+            {
+                var windowText = User32Api.GetTextFromWindow(hWnd)?.TrimEnd(trimChar: '\0');
+                if (windowText != null && windowText.EndsWith(
+                        " - YouTube - Google Chrome",
+                        StringComparison.OrdinalIgnoreCase
+                    ))
+                {
+                    result = hWnd;
+                    return false; // Stop enumerating windows
+                }
+
+                return true;
+            },
+            IntPtr.Zero
+        );
+        return result;
     }
 }
