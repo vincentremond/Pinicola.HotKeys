@@ -67,20 +67,23 @@ public static class HookRegister
         );
     }
 
-    private static void Noop()
+    private static Task Noop()
     {
         // This is a no-op, used to register the hotkey without any action.
         // It can be useful for debugging or testing purposes.
+        return Task.CompletedTask;
     }
 
-    private static void SetTimeStampToClipBoard()
+    private static Task SetTimeStampToClipBoard()
     {
         KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss"));
+        return Task.CompletedTask;
     }
 
-    private static void SetDayStampToClipBoard()
+    private static Task SetDayStampToClipBoard()
     {
         KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd"));
+        return Task.CompletedTask;
     }
 
     private static void KeyPresses(string str)
@@ -115,7 +118,7 @@ public static class HookRegister
         };
     }
 
-    private static void Register(Action action, params VirtualKeyCode[][] keyCombinations)
+    private static void Register(Func<Task> action, params VirtualKeyCode[][] keyCombinations)
     {
         foreach (var keyCombination in keyCombinations)
         {
@@ -136,7 +139,7 @@ public static class HookRegister
                                     await Task.Delay(millisecondsDelay: 50);
                                 }
 
-                                action();
+                                await action();
                             }
                         );
                     }
@@ -144,14 +147,16 @@ public static class HookRegister
         }
     }
 
-    private static void Maximize()
+    private static Task Maximize()
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Maximize);
+        return Task.CompletedTask;
     }
 
-    private static void Minimize()
+    private static Task Minimize()
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Minimize);
+        return Task.CompletedTask;
     }
 
     private static void ShowOrHideForegroundWindow(ShowWindowCommands command)
@@ -174,7 +179,7 @@ public static class HookRegister
         }
     }
 
-    private static void YoutubeNext()
+    private static async Task YoutubeNext()
     {
         // Save current foreground window handle
         var foregroundWindowHandle = User32Api.GetForegroundWindow();
@@ -197,7 +202,7 @@ public static class HookRegister
         );
 
         // Wait for 1 second
-        Thread.Sleep(millisecondsTimeout: 1000);
+        await Task.Delay(millisecondsDelay: 1000);
 
         // Send Shift+N to play next video
         KeyboardInputGenerator.KeyCombinationPress(
@@ -205,7 +210,7 @@ public static class HookRegister
         );
 
         // Wait for 1 second
-        Thread.Sleep(millisecondsTimeout: 1000);
+        await Task.Delay(millisecondsDelay: 1000);
 
         // Restore original foreground window
         if (foregroundWindowHandle != IntPtr.Zero)
