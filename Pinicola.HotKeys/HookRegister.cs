@@ -14,6 +14,10 @@ public static class HookRegister
             Noop,
             [
                 VirtualKeyCode.Capital,
+            ],
+            [
+                VirtualKeyCode.Shift,
+                VirtualKeyCode.Capital,
             ]
         );
 
@@ -23,6 +27,9 @@ public static class HookRegister
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Up,
+            ],
+            [
+                VirtualKeyCode.Multiply,
             ]
         );
 
@@ -32,9 +39,11 @@ public static class HookRegister
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Down,
+            ],
+            [
+                VirtualKeyCode.Divide,
             ]
         );
-
 
         Register(
             SetTimeStampToClipBoard,
