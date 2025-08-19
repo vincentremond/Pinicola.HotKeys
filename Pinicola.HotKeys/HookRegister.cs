@@ -2,7 +2,6 @@
 using Dapplo.Windows.Input.Keyboard;
 using Dapplo.Windows.User32;
 using Dapplo.Windows.User32.Enums;
-using TextCopy;
 
 namespace Pinicola.HotKeys;
 
@@ -76,14 +75,44 @@ public static class HookRegister
 
     private static void SetTimeStampToClipBoard()
     {
-        var timestamp = DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss");
-        ClipboardService.SetText(timestamp);
+        KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss"));
     }
 
     private static void SetDayStampToClipBoard()
     {
-        var timestamp = DateTimeOffset.Now.ToString("yyyy-MM-dd");
-        ClipboardService.SetText(timestamp);
+        KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd"));
+    }
+
+    private static void KeyPresses(string str)
+    {
+        var keyPresses = ToKeyCode(str);
+        KeyboardInputGenerator.KeyPresses(keyPresses);
+    }
+
+    private static VirtualKeyCode[] ToKeyCode(string str)
+    {
+        var virtualKeyCodes = str.Select(ToKeyCode).ToArray();
+        return virtualKeyCodes;
+    }
+
+    private static VirtualKeyCode ToKeyCode(char c)
+    {
+        return c switch
+        {
+            '-' => VirtualKeyCode.OemMinus,
+            '0' => VirtualKeyCode.Key0,
+            '1' => VirtualKeyCode.Key1,
+            '2' => VirtualKeyCode.Key2,
+            '3' => VirtualKeyCode.Key3,
+            '4' => VirtualKeyCode.Key4,
+            '5' => VirtualKeyCode.Key5,
+            '6' => VirtualKeyCode.Key6,
+            '7' => VirtualKeyCode.Key7,
+            '8' => VirtualKeyCode.Key8,
+            '9' => VirtualKeyCode.Key9,
+
+            _ => throw new ArgumentOutOfRangeException(nameof(c), c, message: null),
+        };
     }
 
     private static void Register(Action action, params VirtualKeyCode[][] keyCombinations)
@@ -104,7 +133,7 @@ public static class HookRegister
                             {
                                 while (keyCombinationHandler.HasKeysPressed)
                                 {
-                                    await Task.Delay(50);
+                                    await Task.Delay(millisecondsDelay: 50);
                                 }
 
                                 action();
@@ -158,7 +187,7 @@ public static class HookRegister
             return;
         }
 
-        // Bring chrome with Youtube in title to front
+        // Bring chrome with YouTube in title to front
         User32Api.SetForegroundWindow(chromeWindowHandle);
 
         // Send Alt+L to remove from Watch Later playlist
@@ -168,7 +197,7 @@ public static class HookRegister
         );
 
         // Wait for 1 second
-        Thread.Sleep(1000);
+        Thread.Sleep(millisecondsTimeout: 1000);
 
         // Send Shift+N to play next video
         KeyboardInputGenerator.KeyCombinationPress(
@@ -176,7 +205,7 @@ public static class HookRegister
         );
 
         // Wait for 1 second
-        Thread.Sleep(1000);
+        Thread.Sleep(millisecondsTimeout: 1000);
 
         // Restore original foreground window
         if (foregroundWindowHandle != IntPtr.Zero)
