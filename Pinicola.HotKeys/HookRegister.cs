@@ -86,20 +86,33 @@ public static class HookRegister
         ClipboardService.SetText(timestamp);
     }
 
-    private static void Register(Action action, VirtualKeyCode[] keyCodes)
+    private static void Register(Action action, params VirtualKeyCode[][] keyCombinations)
     {
-        var keyCombinationHandler = new KeyCombinationHandler(keyCodes)
+        foreach (var keyCombination in keyCombinations)
         {
-            IgnoreInjected = false,
-        };
+            var keyCombinationHandler = new KeyCombinationHandler(keyCombination)
+            {
+                IgnoreInjected = false,
+            };
 
-        KeyboardHook.KeyboardEvents.Where(keyCombinationHandler)
-            .Subscribe(x =>
-                {
-                    x.Handled = true;
-                    action();
-                }
-            );
+            KeyboardHook.KeyboardEvents
+                .Where(keyCombinationHandler)
+                .Subscribe(x =>
+                    {
+                        x.Handled = true;
+                        Task.Run(async () =>
+                            {
+                                while (keyCombinationHandler.HasKeysPressed)
+                                {
+                                    await Task.Delay(50);
+                                }
+
+                                action();
+                            }
+                        );
+                    }
+                );
+        }
     }
 
     private static void Maximize()
