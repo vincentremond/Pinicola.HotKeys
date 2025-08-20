@@ -59,10 +59,17 @@ public static class HookRegister
             ]
         );
         Register(
-            YoutubeNext,
+            YoutubeRemoveFromWatchLaterAndNext,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyN,
+            ]
+        );
+        Register(
+            YoutubeRemoveFromWatchLater,
+            [
+                VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
+                VirtualKeyCode.Menu, VirtualKeyCode.KeyL,
             ]
         );
     }
@@ -179,7 +186,17 @@ public static class HookRegister
         }
     }
 
-    private static async Task YoutubeNext()
+    private static async Task YoutubeRemoveFromWatchLaterAndNext()
+    {
+        await InnerYoutube(skipNext: true);
+    }
+
+    private static async Task YoutubeRemoveFromWatchLater()
+    {
+        await InnerYoutube(skipNext: false);
+    }
+
+    private static async Task InnerYoutube(bool skipNext)
     {
         // Save current foreground window handle
         var foregroundWindowHandle = User32Api.GetForegroundWindow();
@@ -195,6 +212,9 @@ public static class HookRegister
         // Bring chrome with YouTube in title to front
         User32Api.SetForegroundWindow(chromeWindowHandle);
 
+        // Wait for 1 second
+        await Task.Delay(millisecondsDelay: 500);
+
         // Send Alt+L to remove from Watch Later playlist
         KeyboardInputGenerator.KeyCombinationPress(
             VirtualKeyCode.LeftMenu,
@@ -204,13 +224,15 @@ public static class HookRegister
         // Wait for 1 second
         await Task.Delay(millisecondsDelay: 1000);
 
-        // Send Shift+N to play next video
-        KeyboardInputGenerator.KeyCombinationPress(
-            VirtualKeyCode.MediaNextTrack
-        );
-
-        // Wait for 1 second
-        await Task.Delay(millisecondsDelay: 1000);
+        if (skipNext)
+        {
+            // Send Shift+N to play next video
+            KeyboardInputGenerator.KeyCombinationPress(
+                VirtualKeyCode.MediaNextTrack
+            );
+            // Wait for 1 second
+            await Task.Delay(millisecondsDelay: 1000);
+        }
 
         // Restore original foreground window
         if (foregroundWindowHandle != IntPtr.Zero)
