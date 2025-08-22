@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{B5FDB5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinicola.HotKeys", "Pinicola.HotKeys\Pinicola.HotKeys.csproj", "{13D23B3B-D542-4351-9FC3-D7FE324ECDCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinicola.HotKeys.Sandbox", "Pinicola.HotKeys.Sandbox\Pinicola.HotKeys.Sandbox.csproj", "{52877FC3-1701-40F9-957C-4BF33391D0A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,18 @@ Global
 		{13D23B3B-D542-4351-9FC3-D7FE324ECDCB}.Release|x64.Build.0 = Release|Any CPU
 		{13D23B3B-D542-4351-9FC3-D7FE324ECDCB}.Release|x86.ActiveCfg = Release|Any CPU
 		{13D23B3B-D542-4351-9FC3-D7FE324ECDCB}.Release|x86.Build.0 = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|x64.Build.0 = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Debug|x86.Build.0 = Debug|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|x64.ActiveCfg = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|x64.Build.0 = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{52877FC3-1701-40F9-957C-4BF33391D0A8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

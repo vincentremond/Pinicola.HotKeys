@@ -210,6 +210,7 @@ public static class HookRegister
         }
 
         // Bring chrome with YouTube in title to front
+        User32Api.ShowWindow(chromeWindowHandle, ShowWindowCommands.Restore);
         User32Api.SetForegroundWindow(chromeWindowHandle);
 
         // Wait for 1 second
@@ -241,7 +242,7 @@ public static class HookRegister
         }
     }
 
-    private static IntPtr GetChromeWindowHandleWithYoutubeTitle()
+    public static IntPtr GetChromeWindowHandleWithYoutubeTitle()
     {
         var result = IntPtr.Zero;
         User32Api.EnumWindows(
