@@ -2,12 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <LangVersion>13</LangVersion>
+    <LangVersion>14</LangVersion>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
