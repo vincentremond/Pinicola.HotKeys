@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>14</LangVersion>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Pinicola.HotKeys.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
