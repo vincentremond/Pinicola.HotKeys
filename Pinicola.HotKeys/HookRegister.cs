@@ -11,6 +11,7 @@ public static class HookRegister
     {
         Register(
             Noop,
+            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Capital,
             ],
@@ -22,6 +23,7 @@ public static class HookRegister
 
         Register(
             Maximize,
+            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
@@ -34,6 +36,7 @@ public static class HookRegister
 
         Register(
             Minimize,
+            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
@@ -45,21 +48,32 @@ public static class HookRegister
         );
 
         Register(
-            SetTimeStampToClipBoard,
+            WriteTimeStamp,
+            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyT,
             ]
         );
         Register(
-            SetDayStampToClipBoard,
+            WriteDateStamp,
+            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyD,
             ]
         );
         Register(
+            WriteMarkdownCodeBlock,
+            triggerOnKeyUp: true,
+            [
+                VirtualKeyCode.LeftControl, VirtualKeyCode.LeftShift,
+                VirtualKeyCode.Menu, VirtualKeyCode.End,
+            ]
+        );
+        Register(
             YoutubeRemoveFromWatchLaterAndNext,
+            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyN,
@@ -67,6 +81,7 @@ public static class HookRegister
         );
         Register(
             YoutubeRemoveFromWatchLater,
+            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyL,
@@ -74,23 +89,27 @@ public static class HookRegister
         );
     }
 
-    private static Task Noop()
+    private static void WriteMarkdownCodeBlock()
+    {
+        KeyboardInputGenerator.KeyPresses(VirtualKeyCode.Oem3, VirtualKeyCode.Space); // Press `
+        KeyboardInputGenerator.KeyPresses(VirtualKeyCode.Oem3, VirtualKeyCode.Space); // Press `
+
+    }
+
+    private static void Noop()
     {
         // This is a no-op, used to register the hotkey without any action.
-        // It can be useful for debugging or testing purposes.
-        return Task.CompletedTask;
+        // It can be useful for disabling certain key combinations
     }
 
-    private static Task SetTimeStampToClipBoard()
+    private static void WriteTimeStamp()
     {
         KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss"));
-        return Task.CompletedTask;
     }
 
-    private static Task SetDayStampToClipBoard()
+    private static void WriteDateStamp()
     {
         KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd"));
-        return Task.CompletedTask;
     }
 
     private static void KeyPresses(string str)
@@ -125,12 +144,13 @@ public static class HookRegister
         };
     }
 
-    private static void Register(Func<Task> action, params VirtualKeyCode[][] keyCombinations)
+    private static void Register(Action action, bool triggerOnKeyUp, params VirtualKeyCode[][] keyCombinations)
     {
         foreach (var keyCombination in keyCombinations)
         {
             var keyCombinationHandler = new KeyCombinationHandler(keyCombination)
             {
+                TriggerOnKeyUp = triggerOnKeyUp,
                 IgnoreInjected = false,
             };
 
@@ -139,31 +159,20 @@ public static class HookRegister
                 .Subscribe(x =>
                     {
                         x.Handled = true;
-                        Task.Run(async () =>
-                            {
-                                while (keyCombinationHandler.HasKeysPressed)
-                                {
-                                    await Task.Delay(millisecondsDelay: 50);
-                                }
-
-                                await action();
-                            }
-                        );
+                        action();
                     }
                 );
         }
     }
 
-    private static Task Maximize()
+    private static void Maximize()
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Maximize);
-        return Task.CompletedTask;
     }
 
-    private static Task Minimize()
+    private static void Minimize()
     {
         ShowOrHideForegroundWindow(ShowWindowCommands.Minimize);
-        return Task.CompletedTask;
     }
 
     private static void ShowOrHideForegroundWindow(ShowWindowCommands command)
@@ -186,17 +195,17 @@ public static class HookRegister
         }
     }
 
-    private static async Task YoutubeRemoveFromWatchLaterAndNext()
+    private static void YoutubeRemoveFromWatchLaterAndNext()
     {
-        await InnerYoutube(skipNext: true);
+        InnerYoutube(skipNext: true);
     }
 
-    private static async Task YoutubeRemoveFromWatchLater()
+    private static void YoutubeRemoveFromWatchLater()
     {
-        await InnerYoutube(skipNext: false);
+        InnerYoutube(skipNext: false);
     }
 
-    private static async Task InnerYoutube(bool skipNext)
+    private static void InnerYoutube(bool skipNext)
     {
         // Save current foreground window handle
         var foregroundWindowHandle = User32Api.GetForegroundWindow();
@@ -214,7 +223,7 @@ public static class HookRegister
         User32Api.SetForegroundWindow(chromeWindowHandle);
 
         // Wait for 1 second
-        await Task.Delay(millisecondsDelay: 500);
+        Thread.Sleep(millisecondsTimeout: 500);
 
         // Send Alt+L to remove from Watch Later playlist
         KeyboardInputGenerator.KeyCombinationPress(
@@ -223,7 +232,7 @@ public static class HookRegister
         );
 
         // Wait for 1 second
-        await Task.Delay(millisecondsDelay: 1000);
+        Thread.Sleep(millisecondsTimeout: 1000);
 
         if (skipNext)
         {
@@ -232,7 +241,7 @@ public static class HookRegister
                 VirtualKeyCode.MediaNextTrack
             );
             // Wait for 1 second
-            await Task.Delay(millisecondsDelay: 1000);
+            Thread.Sleep(millisecondsTimeout: 1000);
         }
 
         // Restore original foreground window
