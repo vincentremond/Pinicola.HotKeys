@@ -2,6 +2,7 @@
 using Dapplo.Windows.Input.Keyboard;
 using Dapplo.Windows.User32;
 using Dapplo.Windows.User32.Enums;
+using TextCopy;
 
 namespace Pinicola.HotKeys;
 
@@ -48,7 +49,7 @@ public static class HookRegister
         );
 
         Register(
-            WriteTimeStamp,
+            WriteTimeStampToClipboard,
             triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
@@ -102,16 +103,21 @@ public static class HookRegister
         // It can be useful for disabling certain key combinations
     }
 
-    private static void WriteTimeStamp()
+    private static void WriteTimeStampToClipboard()
     {
-        KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss"));
+        var timeStamp = DateTimeOffset.Now.ToString("yyyy-MM-dd--HH-mm-ss");
+        ClipboardService.SetText(timeStamp);
+        // KeyPresses(timeStamp);
     }
 
     private static void WriteDateStamp()
     {
-        KeyPresses(DateTimeOffset.Now.ToString("yyyy-MM-dd"));
+        var dateStamp = DateTimeOffset.Now.ToString("yyyy-MM-dd");
+        ClipboardService.SetText(dateStamp);
+        // KeyPresses(dateStamp);
     }
 
+/*
     private static void KeyPresses(string str)
     {
         var keyPresses = ToKeyCode(str);
@@ -143,6 +149,7 @@ public static class HookRegister
             _ => throw new ArgumentOutOfRangeException(nameof(c), c, message: null),
         };
     }
+*/
 
     private static void Register(Action action, bool triggerOnKeyUp, params VirtualKeyCode[][] keyCombinations)
     {
