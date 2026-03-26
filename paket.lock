@@ -22,11 +22,11 @@ NUGET
       Dapplo.Windows.Common (>= 2.0.83) - restriction: >= netstandard2.0
       Dapplo.Windows.Messages (>= 2.0.83) - restriction: >= netstandard2.0
       System.Reactive (>= 6.1) - restriction: >= netstandard2.0
-    Microsoft.Bcl.AsyncInterfaces (10.0.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Bcl.AsyncInterfaces (10.0.5) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
     Microsoft.Bcl.HashCode (6.0) - restriction: >= net48
-    Microsoft.Extensions.DependencyInjection.Abstractions (10.0.3) - restriction: || (>= net462) (>= netstandard2.0)
-      Microsoft.Bcl.AsyncInterfaces (>= 10.0.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
+    Microsoft.Extensions.DependencyInjection.Abstractions (10.0.5) - restriction: || (>= net462) (>= netstandard2.0)
+      Microsoft.Bcl.AsyncInterfaces (>= 10.0.5) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
       System.Threading.Tasks.Extensions (>= 4.6.3) - restriction: || (>= net462) (&& (>= netstandard2.0) (< netstandard2.1))
     Microsoft.NETCore.Platforms (7.0.4) - restriction: || (&& (>= monoandroid) (>= netcoreapp2.0) (< netstandard1.3)) (&& (>= monoandroid) (>= netcoreapp2.1) (< netstandard1.3)) (&& (< monoandroid) (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (>= monotouch) (>= netcoreapp2.0)) (&& (>= monotouch) (>= netcoreapp2.1)) (&& (>= net461) (>= netcoreapp2.0)) (&& (>= net461) (>= netcoreapp2.1)) (&& (>= netcoreapp2.0) (< netcoreapp2.1) (>= xamarinios)) (&& (>= netcoreapp2.0) (< netcoreapp2.1) (>= xamarinmac)) (&& (>= netcoreapp2.0) (< netcoreapp2.1) (>= xamarintvos)) (&& (>= netcoreapp2.0) (< netcoreapp2.1) (>= xamarinwatchos)) (&& (>= netcoreapp2.0) (>= uap10.1)) (&& (< netcoreapp2.0) (>= netcoreapp2.1)) (&& (>= netcoreapp2.1) (< netcoreapp3.0)) (&& (>= netcoreapp2.1) (>= uap10.1))
     Microsoft.Win32.Registry (5.0) - restriction: && (< net48) (< net8.0-windows7.0) (>= netstandard2.0)
