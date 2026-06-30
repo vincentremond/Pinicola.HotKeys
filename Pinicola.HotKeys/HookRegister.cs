@@ -12,7 +12,6 @@ public static class HookRegister
     {
         Register(
             Noop,
-            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Capital,
             ],
@@ -24,7 +23,6 @@ public static class HookRegister
 
         Register(
             Maximize,
-            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
@@ -37,7 +35,6 @@ public static class HookRegister
 
         Register(
             Minimize,
-            triggerOnKeyUp: false,
             [
                 VirtualKeyCode.Shift,
                 VirtualKeyCode.LeftWin,
@@ -50,7 +47,6 @@ public static class HookRegister
 
         Register(
             WriteTimeStampToClipboard,
-            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyT,
@@ -58,23 +54,13 @@ public static class HookRegister
         );
         Register(
             WriteDateStamp,
-            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyD,
             ]
         );
         Register(
-            WriteMarkdownCodeBlock,
-            triggerOnKeyUp: true,
-            [
-                VirtualKeyCode.LeftControl, VirtualKeyCode.LeftShift,
-                VirtualKeyCode.Menu, VirtualKeyCode.End,
-            ]
-        );
-        Register(
             YoutubeRemoveFromWatchLaterAndNext,
-            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyN,
@@ -82,19 +68,11 @@ public static class HookRegister
         );
         Register(
             YoutubeRemoveFromWatchLater,
-            triggerOnKeyUp: true,
             [
                 VirtualKeyCode.LeftControl, VirtualKeyCode.LeftWin,
                 VirtualKeyCode.Menu, VirtualKeyCode.KeyL,
             ]
         );
-    }
-
-    private static void WriteMarkdownCodeBlock()
-    {
-        KeyboardInputGenerator.KeyPresses(VirtualKeyCode.Oem3, VirtualKeyCode.Space); // Press `
-        KeyboardInputGenerator.KeyPresses(VirtualKeyCode.Oem3, VirtualKeyCode.Space); // Press `
-
     }
 
     private static void Noop()
@@ -151,13 +129,12 @@ public static class HookRegister
     }
 */
 
-    private static void Register(Action action, bool triggerOnKeyUp, params VirtualKeyCode[][] keyCombinations)
+    private static void Register(Action action, params VirtualKeyCode[][] keyCombinations)
     {
         foreach (var keyCombination in keyCombinations)
         {
             var keyCombinationHandler = new KeyCombinationHandler(keyCombination)
             {
-                TriggerOnKeyUp = triggerOnKeyUp,
                 IgnoreInjected = false,
             };
 
